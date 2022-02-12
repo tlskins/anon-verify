@@ -32,3 +32,9 @@ export const getTokenMetadata = async ( tokenAddr: string ): Promise<Metadata | 
 
   return Metadata.from(new Account(tokenAddr, mintAccInfo));
 }
+
+export const checkToken = async (metadata: Metadata | undefined): Promise<boolean> => {
+  return !!metadata &&
+    metadata.data.updateAuthority === process.env.NEXT_PUBLIC_TOKEN_UPDATE_AUTHORITY &&
+    metadata.data.data.symbol === process.env.NEXT_PUBLIC_TOKEN_SYMBOL
+}
