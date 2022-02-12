@@ -50,7 +50,6 @@ const Home: NextPage = () => {
     }
   }
 
-
   const checkManualToken = async (e: KeyboardEvent<HTMLInputElement>) => {
     if ( e.key !== "Enter" ) {
       return
