@@ -1,5 +1,5 @@
 import type { AppProps } from 'next/app'
-import { FC, ReactNode } from 'react'
+import { ReactNode } from 'react'
 import dynamic from 'next/dynamic'
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui'
 

@@ -6,13 +6,38 @@ import {
   WalletMultiButton,
 } from '@solana/wallet-adapter-react-ui'
 import { useWallet } from '@solana/wallet-adapter-react'
+import { useState, useEffect } from 'react'
+
+import { getWalletTokenAddrs, getTokenMetadata } from './api/solana'
 
 import styles from '../styles/Home.module.css'
-
 
 const Home: NextPage = () => {
   const { publicKey } = useWallet()
   const walletPublicKey = publicKey?.toString()
+  const [wallet, setWallet] = useState(undefined as string | undefined)
+
+  useEffect(() => {
+    setWallet(walletPublicKey)
+    if ( walletPublicKey ) {
+      loadTokens( walletPublicKey )
+    }
+  }, [walletPublicKey])
+
+  const loadTokens = async (address: string) => {
+    const tokenAddresses = await getWalletTokenAddrs( address )
+    console.log('found tokens ', tokenAddresses.length)
+    for (let i=0;i<tokenAddresses.length;i++) {
+      const metadata = await getTokenMetadata(tokenAddresses[i])
+
+      if ( metadata &&
+        metadata.data.updateAuthority === process.env.NEXT_PUBLIC_TOKEN_UPDATE_AUTHORITY &&
+        metadata.data.data.symbol === process.env.NEXT_PUBLIC_TOKEN_SYMBOL
+      ) {
+        console.log('token matched ', metadata)
+      }
+    }
+  }
 
   console.log('pubkey', walletPublicKey)
 
